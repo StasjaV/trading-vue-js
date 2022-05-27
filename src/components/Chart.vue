@@ -220,6 +220,9 @@ export default {
             }
         },
         emit_custom_event(d) {
+			if (this.$options.propsData.config.PREPARED_DATA){
+				return;
+			}
             this.on_shader_event(d, 'botbar')
             this.$emit('custom-event', d)
             if (d.event === 'remove-layer-meta') {
