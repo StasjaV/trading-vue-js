@@ -274,7 +274,7 @@ export default {
             return this.sett.precision || 2
         },
         new_font() {
-            return '12px ' + this.$props.font.split('px').pop()
+            return 'textFont' in this.sett ? this.sett.textFont : '12px Arial'
         },
         price() {
             return 'price' in this.sett ? this.sett.price : true

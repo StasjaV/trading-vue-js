@@ -1,5 +1,5 @@
 /*!
- * TradingVue.JS - v1.0.2 - Fri May 27 2022
+ * TradingVue.JS - v1.0.2 - Sun May 29 2022
  *     https://github.com/tvjsx/trading-vue-js
  *     Copyright (c) 2019 C451 Code's All Right;
  *     Licensed under the MIT license
@@ -6616,7 +6616,7 @@ LineTool_component.options.__file = "src/components/overlays/LineTool.vue"
       return this.sett.precision || 2;
     },
     new_font: function new_font() {
-      return '12px ' + this.$props.font.split('px').pop();
+      return 'textFont' in this.sett ? this.sett.textFont : '12px Arial';
     },
     price: function price() {
       return 'price' in this.sett ? this.sett.price : true;
