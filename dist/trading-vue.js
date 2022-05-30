@@ -9445,7 +9445,7 @@ var TI = /*#__PURE__*/function () {
         locked: false,
         values: {},
         scroll_lock: false,
-        mode: utils.xmode()
+        mode: this.$props.config.CURSOR_MODE != null ? this.$props.config.CURSOR_MODE : utils.xmode()
       },
       // A trick to re-render botbar
       rerender: 0,

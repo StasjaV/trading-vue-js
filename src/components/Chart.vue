@@ -348,7 +348,7 @@ export default {
             cursor: {
                 x: null, y: null, t: null, y$: null,
                 grid_id: null, locked: false, values: {},
-                scroll_lock: false, mode: Utils.xmode()
+                scroll_lock: false, mode: this.$props.config.CURSOR_MODE != null ? this.$props.config.CURSOR_MODE : Utils.xmode()
             },
 
             // A trick to re-render botbar
