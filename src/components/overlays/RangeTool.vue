@@ -169,9 +169,10 @@ export default {
         // WTF? I know dude, a lot of shitty code here
         draw_value(ctx, dir, xm, y) {
             ctx.font = this.new_font
-            // Price delta (anf percent)
-            let d$ = (this.p2[1] - this.p1[1]).toFixed(this.prec)
-            let p = (100 * (this.p2[1] / this.p1[1] - 1)).toFixed(this.prec)
+            // Price value, price delta and price percent delta
+			let v$ = (this.p2[1]).toFixed(this.prec)
+			let d$ = (this.p2[1] - this.p1[1]).toFixed(this.prec)
+            let p$ = (100 * (this.p2[1] / this.p1[1] - 1)).toFixed(this.prec)
             // Map interval to the actual tf (in ms)
             let f = t => this.layout.ti_map.smth2t(t)
             let dt = f(this.p2[0]) - f(this.p1[0])
@@ -189,7 +190,9 @@ export default {
             // Format time delta
             let dtstr = this.t2str(dt)
             let text = []
-            if (this.price) text.push(`${d$}  (${p}%)`)
+            if (this.price) {
+				text.push((this.show_actual_price ? `${v$}` : `${d$}`) + ` (` + (p$ > 0 ? `+` : ``) + `${p$}%)`)
+			}
             if (this.time) text.push(`${b} bars, ${dtstr}`)
             text = text.join('\n')
             // "Multiple" fillText
@@ -284,7 +287,10 @@ export default {
         },
         shift() {
             return this.sett.shiftMode
-        }
+        },
+		show_actual_price() {
+			return this.sett.showActualPrice
+		}
     },
     data() {
         return {}

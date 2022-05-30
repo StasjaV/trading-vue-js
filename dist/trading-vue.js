@@ -1,5 +1,5 @@
 /*!
- * TradingVue.JS - v1.0.2 - Sun May 29 2022
+ * TradingVue.JS - v1.0.2 - Mon May 30 2022
  *     https://github.com/tvjsx/trading-vue-js
  *     Copyright (c) 2019 C451 Code's All Right;
  *     Licensed under the MIT license
@@ -6507,10 +6507,11 @@ LineTool_component.options.__file = "src/components/overlays/LineTool.vue"
     draw_value: function draw_value(ctx, dir, xm, y) {
       var _this2 = this;
 
-      ctx.font = this.new_font; // Price delta (anf percent)
+      ctx.font = this.new_font; // Price value, price delta and price percent delta
 
+      var v$ = this.p2[1].toFixed(this.prec);
       var d$ = (this.p2[1] - this.p1[1]).toFixed(this.prec);
-      var p = (100 * (this.p2[1] / this.p1[1] - 1)).toFixed(this.prec); // Map interval to the actual tf (in ms)
+      var p$ = (100 * (this.p2[1] / this.p1[1] - 1)).toFixed(this.prec); // Map interval to the actual tf (in ms)
 
       var f = function f(t) {
         return _this2.layout.ti_map.smth2t(t);
@@ -6532,7 +6533,11 @@ LineTool_component.options.__file = "src/components/overlays/LineTool.vue"
 
       var dtstr = this.t2str(dt);
       var text = [];
-      if (this.price) text.push("".concat(d$, "  (").concat(p, "%)"));
+
+      if (this.price) {
+        text.push((this.show_actual_price ? "".concat(v$) : "".concat(d$)) + " (" + (p$ > 0 ? "+" : "") + "".concat(p$, "%)"));
+      }
+
       if (this.time) text.push("".concat(b, " bars, ").concat(dtstr));
       text = text.join('\n'); // "Multiple" fillText
 
@@ -6626,6 +6631,9 @@ LineTool_component.options.__file = "src/components/overlays/LineTool.vue"
     },
     shift: function shift() {
       return this.sett.shiftMode;
+    },
+    show_actual_price: function show_actual_price() {
+      return this.sett.showActualPrice;
     }
   },
   data: function data() {
