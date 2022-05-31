@@ -1,5 +1,5 @@
 /*!
- * TradingVue.JS - v1.0.2 - Mon May 30 2022
+ * TradingVue.JS - v1.0.2 - Tue May 31 2022
  *     https://github.com/tvjsx/trading-vue-js
  *     Copyright (c) 2019 C451 Code's All Right;
  *     Licensed under the MIT license
@@ -6509,7 +6509,7 @@ LineTool_component.options.__file = "src/components/overlays/LineTool.vue"
 
       ctx.font = this.new_font; // Price value, price delta and price percent delta
 
-      var v$ = this.p2[1].toFixed(this.prec);
+      var v$ = this.p2[1] > 999 ? this.p2[1].toFixed(0) : this.p2[1].toFixed(this.prec);
       var d$ = (this.p2[1] - this.p1[1]).toFixed(this.prec);
       var p$ = (100 * (this.p2[1] / this.p1[1] - 1)).toFixed(this.prec); // Map interval to the actual tf (in ms)
 

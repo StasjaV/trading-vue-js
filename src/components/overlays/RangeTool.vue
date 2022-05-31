@@ -170,7 +170,7 @@ export default {
         draw_value(ctx, dir, xm, y) {
             ctx.font = this.new_font
             // Price value, price delta and price percent delta
-			let v$ = (this.p2[1]).toFixed(this.prec)
+			let v$ = this.p2[1] > 999 ? (this.p2[1]).toFixed(0) : (this.p2[1]).toFixed(this.prec)
 			let d$ = (this.p2[1] - this.p1[1]).toFixed(this.prec)
             let p$ = (100 * (this.p2[1] / this.p1[1] - 1)).toFixed(this.prec)
             // Map interval to the actual tf (in ms)
