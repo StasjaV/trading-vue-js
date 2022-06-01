@@ -1,5 +1,5 @@
 /*!
- * TradingVue.JS - v1.0.2 - Tue May 31 2022
+ * TradingVue.JS - v1.0.2 - Wed Jun 01 2022
  *     https://github.com/tvjsx/trading-vue-js
  *     Copyright (c) 2019 C451 Code's All Right;
  *     Licensed under the MIT license
@@ -8409,31 +8409,23 @@ var Botbar = /*#__PURE__*/function () {
       this.ctx.lineTo(Math.floor(width + 1), 0.5);
       this.ctx.stroke();
       this.ctx.fillStyle = this.$p.colors.text;
-      this.ctx.beginPath();
+      this.ctx.beginPath(); //for (var p of this.layout.botbar.xs) {
 
-      var _iterator = botbar_createForOfIteratorHelper(this.layout.botbar.xs),
-          _step;
+      for (var i in this.layout.botbar.xs) {
+        var p = this.layout.botbar.xs[i];
+        var pPrev = i > 0 ? this.layout.botbar.xs[i - 1] : null;
+        var lbl = this.format_date(p, pPrev);
+        if (p[0] > width - sb) continue;
+        this.ctx.moveTo(p[0] - 0.5, 0);
+        this.ctx.lineTo(p[0] - 0.5, 4.5);
 
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var p = _step.value;
-          var lbl = this.format_date(p);
-          if (p[0] > width - sb) continue;
-          this.ctx.moveTo(p[0] - 0.5, 0);
-          this.ctx.lineTo(p[0] - 0.5, 4.5);
-
-          if (!this.lbl_highlight(p[1][0])) {
-            this.ctx.globalAlpha = 0.85;
-          }
-
-          this.ctx.textAlign = 'center';
-          this.ctx.fillText(lbl, p[0], 18);
-          this.ctx.globalAlpha = 1;
+        if (!this.lbl_highlight(p[1][0])) {
+          this.ctx.globalAlpha = 0.85;
         }
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
+
+        this.ctx.textAlign = 'center';
+        this.ctx.fillText(lbl, p[0], 18);
+        this.ctx.globalAlpha = 1;
       }
 
       this.ctx.stroke();
@@ -8449,20 +8441,20 @@ var Botbar = /*#__PURE__*/function () {
         cursor: this.$p.cursor
       };
 
-      var _iterator2 = botbar_createForOfIteratorHelper(this.comp.bot_shaders),
-          _step2;
+      var _iterator = botbar_createForOfIteratorHelper(this.comp.bot_shaders),
+          _step;
 
       try {
-        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-          var s = _step2.value;
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var s = _step.value;
           this.ctx.save();
           s.draw(this.ctx, props);
           this.ctx.restore();
         }
       } catch (err) {
-        _iterator2.e(err);
+        _iterator.e(err);
       } finally {
-        _iterator2.f();
+        _iterator.f();
       }
     }
   }, {
@@ -8482,27 +8474,39 @@ var Botbar = /*#__PURE__*/function () {
       this.ctx.fillText(lbl, cursor, y + 16);
     }
   }, {
-    key: "format_date",
-    value: function format_date(p) {
-      var t = p[1][0];
+    key: "get_date",
+    value: function get_date(t) {
       t = this.grid_0.ti_map.i2t(t);
       var ti = this.$p.layout.grids[0].ti_map.tf; // Enable timezones only for tf < 1D
 
       var k = ti < botbar_DAY ? 1 : 0;
       var tZ = t + k * this.$p.timezone * botbar_HOUR; //t += new Date(t).getTimezoneOffset() * MINUTE
 
-      var d = new Date(tZ);
+      return new Date(tZ);
+    }
+  }, {
+    key: "format_date",
+    value: function format_date(p, pPrev) {
+      if (pPrev === void 0) {
+        pPrev = null;
+      }
 
-      if (p[2] === botbar_YEAR || utils.year_start(t) === t) {
+      var t = p[1][0];
+      var d = this.get_date(t);
+      var dPrev = pPrev == null ? null : this.get_date(pPrev[1][0]);
+
+      if (p[2] == botbar_YEAR || utils.year_start(t) === t || dPrev != null && d.getUTCFullYear() != dPrev.getUTCFullYear()) {
         return d.getUTCFullYear();
       }
 
-      if (p[2] === botbar_MONTH || utils.month_start(t) === t) {
+      if (p[2] === botbar_MONTH || utils.month_start(t) === t || dPrev != null && d.getUTCMonth() != dPrev.getUTCMonth()) {
         return botbar_MONTHMAP[d.getUTCMonth()];
-      } // TODO(*) see grid_maker.js
+      }
 
+      if (p[2] === botbar_DAY || utils.day_start(t) === t || dPrev != null && d.getUTCDate() != dPrev.getUTCDate()) {
+        return d.getUTCDate();
+      }
 
-      if (utils.day_start(tZ) === tZ) return d.getUTCDate();
       var h = utils.add_zero(d.getUTCHours());
       var m = utils.add_zero(d.getUTCMinutes());
       return h + ":" + m;

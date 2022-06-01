@@ -42,9 +42,12 @@ export default class Botbar {
         this.ctx.fillStyle = this.$p.colors.text
         this.ctx.beginPath()
 
-        for (var p of this.layout.botbar.xs) {
+		//for (var p of this.layout.botbar.xs) {
+		for (var i in this.layout.botbar.xs) {
+			var p = this.layout.botbar.xs[i];
+			var pPrev = i > 0 ? this.layout.botbar.xs[i-1] : null;
 
-            let lbl = this.format_date(p)
+            let lbl = this.format_date(p, pPrev)
 
             if (p[0] > width - sb) continue
 
@@ -99,25 +102,33 @@ export default class Botbar {
 
     }
 
-    format_date(p) {
-        let t = p[1][0]
+	get_date(t) {
+
         t = this.grid_0.ti_map.i2t(t)
         let ti = this.$p.layout.grids[0].ti_map.tf
         // Enable timezones only for tf < 1D
         let k = ti < DAY ? 1 : 0
         let tZ = t + k * this.$p.timezone * HOUR
+		//t += new Date(t).getTimezoneOffset() * MINUTE
+        return new Date(tZ)
+    }
 
-        //t += new Date(t).getTimezoneOffset() * MINUTE
-        let d = new Date(tZ)
+    format_date(p, pPrev=null) {
+		let t = p[1][0]
+		let d = this.get_date(t)
+		let dPrev = pPrev == null ? null : this.get_date(pPrev[1][0])
 
-        if (p[2] === YEAR || Utils.year_start(t) === t) {
-            return d.getUTCFullYear()
-        }
-        if (p[2] === MONTH || Utils.month_start(t) === t) {
+		if (p[2] == YEAR || Utils.year_start(t) === t || dPrev != null && d.getUTCFullYear() != dPrev.getUTCFullYear()) {
+			return d.getUTCFullYear()
+		}
+
+        if (p[2] === MONTH || Utils.month_start(t) === t || dPrev != null && d.getUTCMonth() != dPrev.getUTCMonth()) {
             return MONTHMAP[d.getUTCMonth()]
         }
-        // TODO(*) see grid_maker.js
-        if (Utils.day_start(tZ) === tZ) return d.getUTCDate()
+
+		if (p[2] === DAY || Utils.day_start(t) === t || dPrev != null && d.getUTCDate() != dPrev.getUTCDate()) {
+			return d.getUTCDate()
+		}
 
         let h = Utils.add_zero(d.getUTCHours())
         let m = Utils.add_zero(d.getUTCMinutes())
