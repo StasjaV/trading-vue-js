@@ -114,25 +114,24 @@ export default class Botbar {
     }
 
     format_date(p, pPrev=null) {
+
 		let t = p[1][0]
 		let d = this.get_date(t)
 		let dPrev = pPrev == null ? null : this.get_date(pPrev[1][0])
 
-		if (p[2] == YEAR || Utils.year_start(t) === t || dPrev != null && d.getUTCFullYear() != dPrev.getUTCFullYear()) {
+		if (dPrev == null) {
 			return d.getUTCFullYear()
-		}
-
-        if (p[2] === MONTH || Utils.month_start(t) === t || dPrev != null && d.getUTCMonth() != dPrev.getUTCMonth()) {
+		} else if (p[2] == YEAR || Utils.year_start(t) === t || d.getUTCFullYear() != dPrev.getUTCFullYear()) {
+			return d.getUTCFullYear()
+		} else if (p[2] === MONTH || Utils.month_start(t) === t || d.getUTCMonth() != dPrev.getUTCMonth()) {
             return MONTHMAP[d.getUTCMonth()]
-        }
-
-		if (p[2] === DAY || Utils.day_start(t) === t || dPrev != null && d.getUTCDate() != dPrev.getUTCDate()) {
+        } else if (p[2] === DAY || Utils.day_start(t) === t || d.getUTCDate() != dPrev.getUTCDate()) {
 			return d.getUTCDate()
+		} else {
+        	let h = Utils.add_zero(d.getUTCHours())
+        	let m = Utils.add_zero(d.getUTCMinutes())
+        	return h + ":" + m
 		}
-
-        let h = Utils.add_zero(d.getUTCHours())
-        let m = Utils.add_zero(d.getUTCMinutes())
-        return h + ":" + m
 
     }
 

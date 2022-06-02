@@ -1,5 +1,5 @@
 /*!
- * TradingVue.JS - v1.0.2 - Wed Jun 01 2022
+ * TradingVue.JS - v1.0.2 - Thu Jun 02 2022
  *     https://github.com/tvjsx/trading-vue-js
  *     Copyright (c) 2019 C451 Code's All Right;
  *     Licensed under the MIT license
@@ -8495,21 +8495,19 @@ var Botbar = /*#__PURE__*/function () {
       var d = this.get_date(t);
       var dPrev = pPrev == null ? null : this.get_date(pPrev[1][0]);
 
-      if (p[2] == botbar_YEAR || utils.year_start(t) === t || dPrev != null && d.getUTCFullYear() != dPrev.getUTCFullYear()) {
+      if (dPrev == null) {
         return d.getUTCFullYear();
-      }
-
-      if (p[2] === botbar_MONTH || utils.month_start(t) === t || dPrev != null && d.getUTCMonth() != dPrev.getUTCMonth()) {
+      } else if (p[2] == botbar_YEAR || utils.year_start(t) === t || d.getUTCFullYear() != dPrev.getUTCFullYear()) {
+        return d.getUTCFullYear();
+      } else if (p[2] === botbar_MONTH || utils.month_start(t) === t || d.getUTCMonth() != dPrev.getUTCMonth()) {
         return botbar_MONTHMAP[d.getUTCMonth()];
-      }
-
-      if (p[2] === botbar_DAY || utils.day_start(t) === t || dPrev != null && d.getUTCDate() != dPrev.getUTCDate()) {
+      } else if (p[2] === botbar_DAY || utils.day_start(t) === t || d.getUTCDate() != dPrev.getUTCDate()) {
         return d.getUTCDate();
+      } else {
+        var h = utils.add_zero(d.getUTCHours());
+        var m = utils.add_zero(d.getUTCMinutes());
+        return h + ":" + m;
       }
-
-      var h = utils.add_zero(d.getUTCHours());
-      var m = utils.add_zero(d.getUTCMinutes());
-      return h + ":" + m;
     }
   }, {
     key: "format_cursor_x",
