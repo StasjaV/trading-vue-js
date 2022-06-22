@@ -20,12 +20,26 @@ export default {
 
             const layout = this.$props.layout
 
-            let x1 = layout.t2screen(this.p1[0])
-            let y1 = layout.$2screen(this.p1[1])
-            ctx.moveTo(x1, y1)
+			let x1 = layout.t2screen(this.p1[0])
+			let y1 = layout.$2screen(this.p1[1])
+			if (this.div_segment) {
+				if (this.p1[1] < this.p2[1]) {
+					y1 -= this.line_width
+				} else {
+					y1 += this.line_width
+				}
+			}
+			ctx.moveTo(x1, y1)
 
-            let x2 = layout.t2screen(this.p2[0])
-            let y2 = layout.$2screen(this.p2[1])
+			let x2 = layout.t2screen(this.p2[0])
+			let y2 = layout.$2screen(this.p2[1])
+			if (this.div_segment) {
+				if (this.p1[1] < this.p2[1]) {
+					y2 -= this.line_width
+				} else {
+					y2 += this.line_width
+				}
+			}
             ctx.lineTo(x2, y2)
 
             ctx.stroke()
@@ -46,6 +60,9 @@ export default {
         },
         line_width() {
             return this.sett.lineWidth || 0.9
+        },
+		div_segment() {
+            return this.sett.divergenceSegment
         },
         color() {
             const n = this.$props.num % 5

@@ -1,5 +1,5 @@
 /*!
- * TradingVue.JS - v1.0.2 - Thu Jun 02 2022
+ * TradingVue.JS - v1.0.2 - Wed Jun 22 2022
  *     https://github.com/tvjsx/trading-vue-js
  *     Copyright (c) 2019 C451 Code's All Right;
  *     Licensed under the MIT license
@@ -2009,7 +2009,8 @@ function Layout(params) {
           data = _step$value$.data,
           grid = _step$value$.grid;
 
-      specs.sub = data;
+      specs.sub = data; //console.log("!!!!!!LAYOUT!!!!!!!!!!", i, JSON.parse(JSON.stringify(data)));
+
       specs.height = hs[i + 1];
       specs.y_t = y_ts[i + 1];
       specs.grid = grid || {};
@@ -4808,9 +4809,27 @@ Channel_component.options.__file = "src/components/overlays/Channel.vue"
       var layout = this.$props.layout;
       var x1 = layout.t2screen(this.p1[0]);
       var y1 = layout.$2screen(this.p1[1]);
+
+      if (this.div_segment) {
+        if (this.p1[1] < this.p2[1]) {
+          y1 -= this.line_width;
+        } else {
+          y1 += this.line_width;
+        }
+      }
+
       ctx.moveTo(x1, y1);
       var x2 = layout.t2screen(this.p2[0]);
       var y2 = layout.$2screen(this.p2[1]);
+
+      if (this.div_segment) {
+        if (this.p1[1] < this.p2[1]) {
+          y2 -= this.line_width;
+        } else {
+          y2 += this.line_width;
+        }
+      }
+
       ctx.lineTo(x2, y2);
       ctx.stroke();
     },
@@ -4834,6 +4853,9 @@ Channel_component.options.__file = "src/components/overlays/Channel.vue"
     },
     line_width: function line_width() {
       return this.sett.lineWidth || 0.9;
+    },
+    div_segment: function div_segment() {
+      return this.sett.divergenceSegment;
     },
     color: function color() {
       var n = this.$props.num % 5;
