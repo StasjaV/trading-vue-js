@@ -4832,6 +4832,36 @@ Channel_component.options.__file = "src/components/overlays/Channel.vue"
 
       ctx.lineTo(x2, y2);
       ctx.stroke();
+
+      if (this.div_segment) {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+
+        if (this.p1[1] < this.p2[1]) {
+          ctx.moveTo(x1 - this.line_width, y1 - Math.round(this.line_width / 2));
+          ctx.lineTo(x1, y1 + Math.round(this.line_width * 1.5));
+          ctx.lineTo(x1 + this.line_width, y1 - Math.round(this.line_width / 2));
+        } else {
+          ctx.moveTo(x1 - this.line_width, y1 + Math.round(this.line_width / 2));
+          ctx.lineTo(x1, y1 - Math.round(this.line_width * 1.5));
+          ctx.lineTo(x1 + this.line_width, y1 + Math.round(this.line_width / 2));
+        }
+
+        ctx.fill();
+        ctx.beginPath();
+
+        if (this.p1[1] < this.p2[1]) {
+          ctx.moveTo(x2 - this.line_width, y2 - Math.round(this.line_width / 2));
+          ctx.lineTo(x2, y2 + Math.round(this.line_width * 1.5));
+          ctx.lineTo(x2 + this.line_width, y2 - Math.round(this.line_width / 2));
+        } else {
+          ctx.moveTo(x2 - this.line_width, y2 + Math.round(this.line_width / 2));
+          ctx.lineTo(x2, y2 - Math.round(this.line_width * 1.5));
+          ctx.lineTo(x2 + this.line_width, y2 + Math.round(this.line_width / 2));
+        }
+
+        ctx.fill();
+      }
     },
     use_for: function use_for() {
       return ['Segment'];
