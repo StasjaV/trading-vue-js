@@ -1,5 +1,5 @@
 /*!
- * TradingVue.JS - v1.0.2 - Wed Jun 22 2022
+ * TradingVue.JS - v1.0.2 - Fri Sep 09 2022
  *     https://github.com/tvjsx/trading-vue-js
  *     Copyright (c) 2019 C451 Code's All Right;
  *     Licensed under the MIT license
@@ -4249,6 +4249,15 @@ Spline_component.options.__file = "src/components/overlays/Spline.vue"
         ctx.beginPath();
         this.draw_spline(ctx, i);
         ctx.stroke();
+      } // MARKER
+
+
+      if (this.marker != null) {
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = 'black';
+        document.body.style.cursor = 'auto';
+        this.selected = null;
+        this.draw_marker(ctx, this.marker);
       }
     },
     draw_spline: function draw_spline(ctx, i) {
@@ -4281,6 +4290,90 @@ Spline_component.options.__file = "src/components/overlays/Spline.vue"
           }
         }
       }
+    },
+    draw_marker: function draw_marker(ctx, p) {
+      if (p[1].size == null) {
+        if (p[1].sel) {
+          p[1].size = {
+            height: 20,
+            width: 17,
+            font: 15
+          };
+        } else {
+          p[1].size = {
+            height: 14,
+            width: 13,
+            font: 11
+          };
+        }
+      }
+
+      if (p[1].position == null) {
+        p[1].position = [0, 0];
+      }
+
+      if (p[1].direction == null) {
+        p[1].direction = "down";
+      }
+
+      var layout = this.$props.layout;
+      var stroke = this.colors.back;
+      var fill = p[1].color || 'orange';
+      var radius = 2;
+      var height = p[1].size.height;
+      var width = p[1].size.width;
+      var x = layout.t2screen(p[0]) - width * 0.5 + p[1].position[0];
+      var y = layout.$2screen(p[1].$) + p[1].position[1];
+
+      if (p[1].direction == "down") {
+        y = y - (height + height / 5);
+      } else {
+        y = y + (height + height / 5);
+      } // Collisions
+
+
+      if (p[1].direction == "down" && this.mouse.x > x && this.mouse.x < x + width && this.mouse.y > y && this.mouse.y < y + height || p[1].direction == "up" && this.mouse.x > x && this.mouse.x < x + width && this.mouse.y < y && this.mouse.y > y - height) {
+        document.body.style.cursor = 'pointer';
+        this.selected = p;
+        stroke = this.colors.text;
+      }
+
+      ctx.beginPath();
+
+      if (p[1].direction == "down") {
+        ctx.moveTo(x + radius, y);
+        ctx.lineTo(x + width - radius, y);
+        ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+        ctx.lineTo(x + width, y + height - radius);
+        ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+        ctx.lineTo(x + width * 1 / 2, y + height * 1.2);
+        ctx.lineTo(x + radius, y + height);
+        ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+        ctx.lineTo(x, y + radius);
+        ctx.quadraticCurveTo(x, y, x + radius, y);
+      } else {
+        ctx.moveTo(x + radius, y);
+        ctx.lineTo(x + width - radius, y);
+        ctx.quadraticCurveTo(x + width, y, x + width, y - radius);
+        ctx.lineTo(x + width, y - height + radius);
+        ctx.quadraticCurveTo(x + width, y - height, x + width - radius, y - height);
+        ctx.lineTo(x + width * 1 / 2, y - height * 1.2);
+        ctx.lineTo(x + radius, y - height);
+        ctx.quadraticCurveTo(x, y - height, x, y - height + radius);
+        ctx.lineTo(x, y - radius);
+        ctx.quadraticCurveTo(x, y, x + radius, y);
+      }
+
+      ctx.lineWidth = 1;
+      ctx.closePath();
+      ctx.fillStyle = fill;
+      ctx.strokeStyle = stroke;
+      ctx.fill();
+      ctx.stroke();
+      ctx.textAlign = 'center';
+      ctx.fillStyle = p[1].textColor || this.colors.back;
+      ctx.font = "".concat(p[1].size.font, "px Arial");
+      ctx.fillText(p[1].text || '$', x + width / 2, p[1].direction == "down" ? y + height * 0.8 : y - height * 0.3);
     },
     use_for: function use_for() {
       return ['Splines', 'DMI'];
@@ -4319,6 +4412,9 @@ Spline_component.options.__file = "src/components/overlays/Spline.vue"
     // Don't connect separate parts if true
     skip_nan: function skip_nan() {
       return this.sett.skipNaN;
+    },
+    marker: function marker() {
+      return this.sett.marker;
     }
   },
   data: function data() {
