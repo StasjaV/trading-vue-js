@@ -70,6 +70,23 @@ export default {
 				}
 				ctx.fill();
 			}
+
+			if (this.legend) {
+	            ctx.fillStyle = this.legend.color
+	            ctx.font = `${ this.legend.font }px Arial`
+				ctx.textAlign =this.legend.align
+				let text_x = (x1 + x2) / 2, text_y = y1 - this.line_width
+				if (this.legend.align == "left") {
+					text_x = x1
+				} else if (this.legend.align == "right") {
+					text_x = x2
+				}
+				if (this.legend.valign == "bottom") {
+					text_y = y1 + this.legend.font
+				}
+	            ctx.fillText(this.legend.text, text_x, text_y)
+			}
+
         },
         use_for() { return ['Segment'] },
         data_colors() { return [this.color] }
@@ -94,6 +111,9 @@ export default {
         color() {
             const n = this.$props.num % 5
             return this.sett.color || this.COLORS[n]
+        },
+        legend() {
+            return this.sett.legend
         }
     },
     data() {

@@ -1,5 +1,5 @@
 /*!
- * TradingVue.JS - v1.0.2 - Fri Sep 09 2022
+ * TradingVue.JS - v1.0.2 - Sat Nov 05 2022
  *     https://github.com/tvjsx/trading-vue-js
  *     Copyright (c) 2019 C451 Code's All Right;
  *     Licensed under the MIT license
@@ -2009,8 +2009,7 @@ function Layout(params) {
           data = _step$value$.data,
           grid = _step$value$.grid;
 
-      specs.sub = data; //console.log("!!!!!!LAYOUT!!!!!!!!!!", i, JSON.parse(JSON.stringify(data)));
-
+      specs.sub = data;
       specs.height = hs[i + 1];
       specs.y_t = y_ts[i + 1];
       specs.grid = grid || {};
@@ -4958,6 +4957,26 @@ Channel_component.options.__file = "src/components/overlays/Channel.vue"
 
         ctx.fill();
       }
+
+      if (this.legend) {
+        ctx.fillStyle = this.legend.color;
+        ctx.font = "".concat(this.legend.font, "px Arial");
+        ctx.textAlign = this.legend.align;
+        var text_x = (x1 + x2) / 2,
+            text_y = y1 - this.line_width;
+
+        if (this.legend.align == "left") {
+          text_x = x1;
+        } else if (this.legend.align == "right") {
+          text_x = x2;
+        }
+
+        if (this.legend.valign == "bottom") {
+          text_y = y1 + this.legend.font;
+        }
+
+        ctx.fillText(this.legend.text, text_x, text_y);
+      }
     },
     use_for: function use_for() {
       return ['Segment'];
@@ -4986,6 +5005,9 @@ Channel_component.options.__file = "src/components/overlays/Channel.vue"
     color: function color() {
       var n = this.$props.num % 5;
       return this.sett.color || this.COLORS[n];
+    },
+    legend: function legend() {
+      return this.sett.legend;
     }
   },
   data: function data() {
