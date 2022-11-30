@@ -1,5 +1,5 @@
 /*!
- * TradingVue.JS - v1.0.2 - Sat Nov 05 2022
+ * TradingVue.JS - v1.0.2 - Wed Nov 30 2022
  *     https://github.com/tvjsx/trading-vue-js
  *     Copyright (c) 2019 C451 Code's All Right;
  *     Licensed under the MIT license
@@ -5423,8 +5423,8 @@ var Price = /*#__PURE__*/function () {
     },
     // In case it's added as offchart overlay
     y_range: function y_range() {
-      var hi = -Infinity,
-          lo = Infinity;
+      var hi = this.high,
+          lo = this.low;
 
       for (var i = 0, n = this.sub.length; i < n; i++) {
         var x = this.sub[i];
@@ -5439,6 +5439,12 @@ var Price = /*#__PURE__*/function () {
   computed: {
     sett: function sett() {
       return this.$props.settings;
+    },
+    high: function high() {
+      return 'high' in this.sett ? this.sett.high : -Infinity;
+    },
+    low: function low() {
+      return 'low' in this.sett ? this.sett.low : Infinity;
     },
     show_volume: function show_volume() {
       return 'showVolume' in this.sett ? this.sett.showVolume : true;

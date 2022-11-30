@@ -50,7 +50,7 @@ export default {
 
         // In case it's added as offchart overlay
         y_range() {
-            var hi = -Infinity, lo = Infinity
+            var hi = this.high, lo = this.low
             for (var i = 0, n = this.sub.length; i < n; i++) {
                 let x = this.sub[i]
                 if (x[2] > hi) hi = x[2]
@@ -64,6 +64,14 @@ export default {
     computed: {
         sett() {
             return this.$props.settings
+        },
+		high() {
+            return 'high' in this.sett ?
+                this.sett.high : -Infinity
+        },
+		low() {
+            return 'low' in this.sett ?
+                this.sett.low : Infinity
         },
         show_volume() {
             return 'showVolume' in this.sett ?
