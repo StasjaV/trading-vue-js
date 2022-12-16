@@ -1,5 +1,5 @@
 /*!
- * TradingVue.JS - v1.0.2 - Wed Nov 30 2022
+ * TradingVue.JS - v1.0.2 - Fri Dec 16 2022
  *     https://github.com/tvjsx/trading-vue-js
  *     Copyright (c) 2019 C451 Code's All Right;
  *     Licensed under the MIT license
@@ -4227,6 +4227,12 @@ if (false) { var Spline_api; }
 Spline_component.options.__file = "src/components/overlays/Spline.vue"
 /* harmony default export */ const Spline = (Spline_component.exports);
 ;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/components/overlays/Splines.vue?vue&type=script&lang=js&
+function Splinesvue_type_script_lang_js_createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = Splinesvue_type_script_lang_js_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function Splinesvue_type_script_lang_js_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return Splinesvue_type_script_lang_js_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return Splinesvue_type_script_lang_js_arrayLikeToArray(o, minLen); }
+
+function Splinesvue_type_script_lang_js_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 // Channel renderer. (Keltner, Bollinger)
 
 /* harmony default export */ const Splinesvue_type_script_lang_js_ = ({
@@ -4251,12 +4257,25 @@ Spline_component.options.__file = "src/components/overlays/Spline.vue"
       } // MARKER
 
 
-      if (this.marker != null) {
+      if (this.markers != null) {
         ctx.lineWidth = 1.5;
         ctx.strokeStyle = 'black';
         document.body.style.cursor = 'auto';
-        this.selected = null;
-        this.draw_marker(ctx, this.marker);
+
+        var _iterator = Splinesvue_type_script_lang_js_createForOfIteratorHelper(this.markers),
+            _step;
+
+        try {
+          for (_iterator.s(); !(_step = _iterator.n()).done;) {
+            var m = _step.value;
+            this.selected = null;
+            this.draw_marker(ctx, m);
+          }
+        } catch (err) {
+          _iterator.e(err);
+        } finally {
+          _iterator.f();
+        }
       }
     },
     draw_spline: function draw_spline(ctx, i) {
@@ -4412,7 +4431,7 @@ Spline_component.options.__file = "src/components/overlays/Spline.vue"
     skip_nan: function skip_nan() {
       return this.sett.skipNaN;
     },
-    marker: function marker() {
+    markers: function markers() {
       return this.sett.marker;
     }
   },

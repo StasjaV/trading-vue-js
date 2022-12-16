@@ -20,12 +20,15 @@ export default {
             }
 
 			// MARKER
-			if ( this.marker != null ) {
+
+			if ( this.markers != null ) {
 				ctx.lineWidth = 1.5
 				ctx.strokeStyle = 'black'
 				document.body.style.cursor = 'auto'
-				this.selected = null
-				this.draw_marker(ctx, this.marker)
+				for (var m of this.markers) {
+					this.selected = null
+	                this.draw_marker(ctx, m)
+	            }
 			}
         },
         draw_spline(ctx, i) {
@@ -174,7 +177,7 @@ export default {
         skip_nan() {
             return this.sett.skipNaN
         },
-		marker() {
+		markers() {
 			return this.sett.marker
 		}
     },
